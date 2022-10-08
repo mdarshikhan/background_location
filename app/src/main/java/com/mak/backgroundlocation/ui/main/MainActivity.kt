@@ -14,12 +14,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.LocationSettingsStates
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.mak.backgroundlocation.R
 import com.mak.backgroundlocation.databinding.ActivityMainBinding
+import com.mak.backgroundlocation.services.ForegroundService
 import com.mak.backgroundlocation.ui.history.LocationHistoryActivity
 import com.mak.backgroundlocation.utils.PermissionUtils
 import com.mak.backgroundlocation.utils.cancelAllNotifications
@@ -148,8 +150,10 @@ class MainActivity : AppCompatActivity() {
         val receivingUpdates = locationUpdateViewModel.receivingLocationUpdates.value
         if (receivingUpdates == true) {
             locationUpdateViewModel.stopLocationUpdates()
+            stopService()
         } else {
             locationUpdateViewModel.startLocationUpdates()
+            startService()
         }
     }
 
@@ -332,6 +336,18 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+        startService()
+    }
+
+    fun startService() {
+        val serviceIntent = Intent(this, ForegroundService::class.java)
+        serviceIntent.putExtra("inputExtra", "Foreground Service Example in Android")
+        ContextCompat.startForegroundService(this, serviceIntent)
+    }
+
+    fun stopService() {
+        val serviceIntent = Intent(this, ForegroundService::class.java)
+        stopService(serviceIntent)
     }
 
     companion object {

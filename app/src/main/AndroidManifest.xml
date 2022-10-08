@@ -52,6 +52,12 @@
             android:name=".receiver.LocationUpdatesBroadcastReceiver"
             android:exported="false" />
 
+        <service
+            android:name=".services.ForegroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location" />
+
     </application>
 
 </manifest>
